@@ -1,6 +1,7 @@
 const t = require('@babel/types');
 
 const EXPORTS_RE = /^\$([^$]+)\$exports$/;
+const PURE_RE = /(@|#)__PURE__/;
 
 /**
  * This is a small small implementation of dead code removal specialized to handle
@@ -74,7 +75,13 @@ function isPure(binding) {
     binding.path.get('id').isIdentifier()
   ) {
     let init = binding.path.get('init');
-    return init.isPure() || init.isIdentifier() || init.isThisExpression();
+    return (
+      init.isPure() ||
+      init.isIdentifier() ||
+      init.isThisExpression() ||
+      (init.node.leadingComments && // is marked pure via comment
+        init.node.leadingComments.some(v => PURE_RE.test(v.value)))
+    );
   }
 
   return binding.path.isPure();

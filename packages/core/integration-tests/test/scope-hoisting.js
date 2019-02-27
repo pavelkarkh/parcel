@@ -452,8 +452,28 @@ describe('scope hoisting', function() {
         path.join(__dirname, '/dist/a.js'),
         'utf8'
       );
-      assert(/.\+./.test(contents));
-      assert(!/.-./.test(contents));
+      assert(/\+/.test(contents));
+      assert(!/-/.test(contents));
+    });
+
+    it('removes pure function calls when minified', async function() {
+      let b = await bundle(
+        path.join(
+          __dirname,
+          '/integration/scope-hoisting/es6/tree-shaking-pure-calls/a.js'
+        ),
+        {minify: true}
+      );
+
+      let output = await run(b);
+      assert.deepEqual(output.default, 14);
+
+      let contents = await fs.readFile(
+        path.join(__dirname, '/dist/a.js'),
+        'utf8'
+      );
+      assert(/\+/.test(contents));
+      assert(!/\*/.test(contents));
     });
 
     it('support exporting a ES6 module exported as CommonJS', async function() {

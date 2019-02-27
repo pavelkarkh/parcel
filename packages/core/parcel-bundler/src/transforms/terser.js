@@ -13,28 +13,29 @@ module.exports = async function(asset) {
     safari10: true,
     mangle: {
       toplevel: !asset.options.scopeHoist
+    },
+    output: {
+      comments: '/__PURE__/'
     }
   };
 
   let sourceMap;
   if (asset.options.sourceMaps) {
     sourceMap = new SourceMap();
-    options.output = {
-      source_map: {
-        add(source, gen_line, gen_col, orig_line, orig_col, name) {
-          sourceMap.addMapping({
-            source,
-            name,
-            original: {
-              line: orig_line,
-              column: orig_col
-            },
-            generated: {
-              line: gen_line,
-              column: gen_col
-            }
-          });
-        }
+    options.output.source_map = {
+      add(source, gen_line, gen_col, orig_line, orig_col, name) {
+        sourceMap.addMapping({
+          source,
+          name,
+          original: {
+            line: orig_line,
+            column: orig_col
+          },
+          generated: {
+            line: gen_line,
+            column: gen_col
+          }
+        });
       }
     };
   }

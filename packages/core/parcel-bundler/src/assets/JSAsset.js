@@ -204,7 +204,7 @@ class JSAsset extends Asset {
     }
 
     if (this.options.minify) {
-      await terser(this);
+      // await terser(this);
     }
   }
 
