@@ -19,8 +19,6 @@ import AssetGraph from './AssetGraph';
 import ResolverRunner from './ResolverRunner';
 import WorkerFarm from '@parcel/workers';
 
-const abortError = new Error('Build aborted');
-
 type BuildOpts = {
   signal: AbortSignal,
   shallow?: boolean
@@ -132,7 +130,7 @@ export default class AssetGraphBuilder extends EventEmitter {
     }
 
     if (signal.aborted) {
-      throw abortError;
+      throw new BuildAbortError();
     }
 
     let req = {filePath: resolvedPath, env: dep.env};
@@ -147,7 +145,7 @@ export default class AssetGraphBuilder extends EventEmitter {
   async transform(req: TransformerRequest, {signal, shallow}: BuildOpts) {
     let cacheEntry = await this.runTransform(req);
 
-    if (signal.aborted) throw abortError;
+    if (signal.aborted) throw new BuildAbortError();
     let {
       addedFiles,
       removedFiles,
@@ -171,4 +169,9 @@ export default class AssetGraphBuilder extends EventEmitter {
       }
     }
   }
+}
+
+export class BuildAbortError extends Error {
+  name = 'BuildAbortError';
+  code = 'BUILD_ABORTED';
 }

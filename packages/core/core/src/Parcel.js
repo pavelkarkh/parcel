@@ -14,10 +14,8 @@ import getRootDir from '@parcel/utils/getRootDir';
 import loadEnv from './loadEnv';
 import path from 'path';
 import Cache from '@parcel/cache';
-import AssetGraphBuilder from './AssetGraphBuilder';
+import AssetGraphBuilder, {BuildAbortError} from './AssetGraphBuilder';
 import ConfigResolver from './ConfigResolver';
-
-const abortError = new Error('Build aborted');
 
 type ParcelOpts = {
   entries: string | Array<string>,
@@ -131,7 +129,7 @@ export default class Parcel {
       // console.log('Finished build'); // eslint-disable-line no-console
       return bundleGraph;
     } catch (e) {
-      if (e !== abortError) {
+      if (e.code !== 'BUILD_ABORTED') {
         console.error(e); // eslint-disable-line no-console
       }
     }
