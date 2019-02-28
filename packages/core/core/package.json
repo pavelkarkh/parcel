@@ -33,6 +33,7 @@
     "@parcel/babel-register": "2.0.0",
     "@parcel/eslint-config": "1.10.3",
     "delay": "^4.1.0",
+    "nullthrows": "^1.1.1",
     "random-int": "^1.0.0"
   },
   "bin": {
