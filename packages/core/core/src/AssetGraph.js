@@ -14,7 +14,7 @@ import type {
   GraphTraversalCallback
 } from '@parcel/types';
 import path from 'path';
-import md5 from '@parcel/utils/lib/md5';
+import {md5FromString} from '@parcel/utils/src/md5';
 import Dependency from './Dependency';
 
 export const nodeFromRootDir = (rootDir: string) => ({
@@ -36,7 +36,7 @@ export const nodeFromFile = (file: File) => ({
 });
 
 export const nodeFromTransformerRequest = (req: TransformerRequest) => ({
-  id: md5(`${req.filePath}:${JSON.stringify(req.env)}`),
+  id: md5FromString(`${req.filePath}:${JSON.stringify(req.env)}`),
   type: 'transformer_request',
   value: req
 });
