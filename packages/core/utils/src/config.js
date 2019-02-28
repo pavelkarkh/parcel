@@ -1,4 +1,5 @@
 // @flow
+
 import type {Config, File, FilePath} from '@parcel/types';
 import fs from '@parcel/fs';
 import path from 'path';

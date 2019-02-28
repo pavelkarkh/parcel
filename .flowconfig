@@ -11,6 +11,7 @@
 [libs]
 
 [lints]
+untyped-type-import=error
 
 [options]
 
